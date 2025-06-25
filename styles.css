@@ -1,94 +1,103 @@
-/* styles.css */
-body, html {
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: 'Arial', sans-serif;
+}
+
+body, html {
   height: 100%;
-  font-family: Arial, sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
   overflow: hidden;
 }
 
-#app {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
 .vid-container video {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: fixed;
   width: 100%;
   height: 100%;
   object-fit: cover;
   z-index: -1;
 }
 
-.controls {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-  z-index: 1;
-}
-
-#time-select {
-  position: absolute;
-  left: 50px;
-  top: 100px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-#time-select button {
-  background: transparent;
-  border: 2px solid white;
-  color: white;
-  padding: 15px 25px;
-  font-size: 20px;
-  border-radius: 10px;
-  cursor: pointer;
-  backdrop-filter: blur(5px);
-}
-
 .player-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
-.play img {
-  width: 100px;
-  height: 100px;
-  cursor: pointer;
-}
-
-.time-display {
-  font-size: 40px;
-  color: white;
-  margin-top: 10px;
-}
-
-.sound-picker {
+.time-select {
   position: absolute;
-  right: 50px;
-  top: 100px;
+  top: 20%;
+  left: 5%;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.sound-picker button {
+.time-select button {
   background: none;
+  border: 2px solid white;
+  color: white;
+  padding: 15px 25px;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 0.3s;
+}
+
+.time-select button:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.play-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.play {
+  width: 150px;
+  height: 150px;
+  cursor: pointer;
+  stroke: white;
+  stroke-width: 4;
+}
+
+.time-display {
+  font-size: 36px;
+  color: white;
+  margin-top: 20px;
+}
+
+.sound-picker {
+  position: absolute;
+  right: 5%;
+  top: 25%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.sound-picker button {
+  width: 100px;
+  height: 100px;
   border: none;
+  border-radius: 50%;
+  background-color: #4069a5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
 }
 
+.sound-picker button:nth-child(2) {
+  background-color: #a54840;
+}
+
 .sound-picker img {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
+  width: 50%;
+  height: 50%;
 }
