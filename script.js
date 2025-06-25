@@ -1,73 +1,87 @@
-const app = document.getElementById('app');
-const video = document.querySelector('video');
-const audio = document.querySelector('.audio');
-const play = document.querySelector('.play');
-const timeDisplay = document.querySelector('.time-display');
-const timeButtons = document.querySelectorAll('#time-select button');
-const soundButtons = document.querySelectorAll('.sound-picker button');
+const audio = document.getElementById("audio");
+const video = document.getElementById("video");
+const playBtn = document.getElementById("play");
+const timeDisplay = document.getElementById("time-display");
+const timeButtons = document.querySelectorAll(".time-select button");
+const soundButtons = document.querySelectorAll(".sound-picker button");
 
-let fakeDuration = 600;
+let duration = 0;
 let timer;
 let isPlaying = false;
 
-timeButtons.forEach(button => {
-  button.addEventListener('click', function () {
-    switch (this.id) {
-      case 'smaller-mins': fakeDuration = 120; break;
-      case 'medium-mins': fakeDuration = 300; break;
-      case 'long-mins': fakeDuration = 600; break;
+// Default audio and video
+const sounds = {
+  rain: {
+    audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    video: "https://www.w3schools.com/howto/rain.mp4"
+  },
+  beach: {
+    audio: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    video: "https://www.w3schools.com/howto/beach.mp4"
+  }
+};
+
+// Default
+let currentSound = sounds.rain;
+loadMedia();
+
+soundButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    currentSound = sounds[btn.id];
+    loadMedia();
+    if (isPlaying) {
+      audio.play();
+      video.play();
     }
-    timeDisplay.textContent = `${Math.floor(fakeDuration / 60)}:${fakeDuration % 60}`;
   });
 });
 
-soundButtons.forEach(button => {
-  button.addEventListener('click', function () {
-    const soundSrc = this.getAttribute('data-sound');
-    const videoSrc = this.getAttribute('data-video');
-    audio.src = soundSrc;
-    video.src = videoSrc;
-    checkPlaying(audio);
+timeButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    duration = parseInt(btn.id === "smaller-mins" ? 5 : 10) * 60;
+    updateTimeDisplay(duration);
   });
 });
 
-play.addEventListener('click', () => {
-  checkPlaying(audio);
-});
-
-function checkPlaying(audio) {
+playBtn.addEventListener("click", () => {
+  if (!duration) return alert("Please select time first!");
   if (!isPlaying) {
     audio.play();
     video.play();
-    playPauseIcon(true);
-    isPlaying = true;
     startTimer();
+    isPlaying = true;
   } else {
     audio.pause();
     video.pause();
-    playPauseIcon(false);
-    isPlaying = false;
     clearInterval(timer);
+    isPlaying = false;
   }
+});
+
+function loadMedia() {
+  audio.src = currentSound.audio;
+  video.src = currentSound.video;
+  audio.load();
+  video.load();
 }
 
 function startTimer() {
-  let currentTime = fakeDuration;
+  let timeLeft = duration;
   timer = setInterval(() => {
-    currentTime--;
-    timeDisplay.textContent = `${Math.floor(currentTime / 60)}:${currentTime % 60}`;
-    if (currentTime <= 0) {
+    if (timeLeft <= 0) {
       clearInterval(timer);
       audio.pause();
       video.pause();
-      playPauseIcon(false);
       isPlaying = false;
+      return;
     }
+    updateTimeDisplay(timeLeft);
+    timeLeft--;
   }, 1000);
 }
 
-function playPauseIcon(isPlaying) {
-  play.innerHTML = isPlaying
-    ? `<circle cx="50" cy="50" r="45"></circle><rect x="35" y="30" width="10" height="40" fill="#fff"></rect><rect x="55" y="30" width="10" height="40" fill="#fff"></rect>`
-    : `<circle cx="50" cy="50" r="45"></circle><polygon points="40,30 70,50 40,70" fill="#fff" />`;
+function updateTimeDisplay(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = String(seconds % 60).padStart(2, '0');
+  timeDisplay.textContent = `${mins}:${secs}`;
 }
